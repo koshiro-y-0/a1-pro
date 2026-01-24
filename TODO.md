@@ -6,71 +6,71 @@
 
 ## 📊 進捗状況サマリー
 
-- **全体進捗**: 0/140 タスク完了 (0%)
-- **現在のフェーズ**: Phase 1 - 環境構築・基盤開発
-- **次のマイルストーン**: 開発環境の完全セットアップ
+- **全体進捗**: Phase 1 完了 (約15/140 タスク完了)
+- **現在のフェーズ**: Phase 1 完了 ✅ → Phase 2 準備中
+- **次のマイルストーン**: コア機能開発の開始
 
 ---
 
 ## Phase 1: 環境構築・基盤開発 (Week 1-2)
 
 ### 1.1 プロジェクト構成作成
-- [ ] プロジェクトルートディレクトリ構成の作成
-  - [ ] `frontend/` ディレクトリ作成
-  - [ ] `backend/` ディレクトリ作成
-  - [ ] `docker/` ディレクトリ作成
-  - [ ] `docs/` ディレクトリ作成
-- [ ] `.gitignore` ファイル作成
-- [ ] `README.md` 作成（プロジェクト概要・セットアップ手順）
-- [ ] `.env.example` ファイル作成（フロント・バック両方）
-- [ ] `docker-compose.yml` 作成
+- [x] プロジェクトルートディレクトリ構成の作成
+  - [x] `frontend/` ディレクトリ作成
+  - [x] `backend/` ディレクトリ作成
+  - [x] `docker/` ディレクトリ作成
+  - [x] `docs/` ディレクトリ作成
+- [x] `.gitignore` ファイル作成
+- [x] `README.md` 作成（プロジェクト概要・セットアップ手順）
+- [x] `.env.example` ファイル作成（フロント・バック両方）
+- [x] `docker-compose.yml` 作成
 
 ### 1.2 Docker環境構築
-- [ ] MySQL用Dockerfileまたはdocker-compose設定
-  - [ ] MySQL 8.0イメージ設定
-  - [ ] 初期化スクリプト作成
-  - [ ] ボリュームマウント設定
-  - [ ] ポート設定 (3306)
-- [ ] ChromaDB用Docker設定
-  - [ ] ChromaDBイメージ設定
-  - [ ] 永続化ボリューム設定
-  - [ ] ポート設定 (8000)
-- [ ] Backend用Dockerfile作成
-  - [ ] Python 3.11ベースイメージ
-  - [ ] 依存関係インストール
-  - [ ] ワーキングディレクトリ設定
-- [ ] Frontend用Dockerfile作成（本番用・オプション）
-  - [ ] Node.js 20ベースイメージ
-  - [ ] Next.jsビルド設定
-- [ ] docker-compose.ymlの統合テスト
+- [x] MySQL用Dockerfileまたはdocker-compose設定
+  - [x] MySQL 8.0イメージ設定
+  - [x] 初期化スクリプト作成
+  - [x] ボリュームマウント設定
+  - [x] ポート設定 (3306)
+- [x] ChromaDB用Docker設定
+  - [x] ChromaDBイメージ設定
+  - [x] 永続化ボリューム設定
+  - [x] ポート設定 (8000)
+- [x] Backend用Dockerfile作成
+  - [x] Python 3.11ベースイメージ
+  - [x] 依存関係インストール
+  - [x] ワーキングディレクトリ設定
+- [x] Frontend用Dockerfile作成（本番用・オプション）
+  - [x] Node.js 20ベースイメージ
+  - [x] Next.jsビルド設定
+- [x] docker-compose.ymlの統合テスト
 
 ### 1.3 Next.js (フロントエンド) セットアップ
-- [ ] Next.jsプロジェクト初期化
+- [x] Next.jsプロジェクト初期化
   ```bash
   npx create-next-app@latest frontend --typescript --tailwind --app
   ```
-- [ ] 必要なパッケージインストール
-  - [ ] `recharts` (グラフライブラリ)
-  - [ ] `axios` (HTTP クライアント)
-  - [ ] `date-fns` (日付処理)
-  - [ ] `@tanstack/react-query` (データフェッチング)
-  - [ ] `zustand` (状態管理・軽量)
-  - [ ] `react-hook-form` (フォーム管理)
-  - [ ] `zod` (バリデーション)
-- [ ] ディレクトリ構成作成
-  - [ ] `src/app/` (App Router)
-  - [ ] `src/components/` (共通コンポーネント)
-  - [ ] `src/lib/` (ユーティリティ関数)
-  - [ ] `src/types/` (TypeScript型定義)
-  - [ ] `src/hooks/` (カスタムフック)
-  - [ ] `src/services/` (API通信)
-- [ ] 環境変数設定 (`.env.local`)
-- [ ] Tailwind CSS設定カスタマイズ
-  - [ ] カラーパレット設定
-  - [ ] フォント設定
+- [x] 必要なパッケージインストール
+  - [x] `recharts` (グラフライブラリ)
+  - [x] `axios` (HTTP クライアント)
+  - [x] `date-fns` (日付処理)
+  - [x] `@tanstack/react-query` (データフェッチング)
+  - [x] `zustand` (状態管理・軽量)
+  - [x] `react-hook-form` (フォーム管理)
+  - [x] `zod` (バリデーション)
+- [x] ディレクトリ構成作成
+  - [x] `src/app/` (App Router)
+  - [x] `src/components/` (共通コンポーネント)
+  - [x] `src/lib/` (ユーティリティ関数)
+  - [x] `src/types/` (TypeScript型定義)
+  - [x] `src/hooks/` (カスタムフック)
+  - [x] `src/services/` (API通信)
+- [x] 環境変数設定 (`.env.local`)
+- [x] Tailwind CSS設定カスタマイズ
+  - [x] カラーパレット設定
+  - [x] フォント設定
 
 ### 1.4 FastAPI (バックエンド) セットアップ
-- [ ] Pythonプロジェクト構造作成
+- [x] Pythonプロジェクト構造作成
   ```
   backend/
   ├── app/
@@ -85,76 +85,76 @@
   ├── requirements.txt
   └── .env
   ```
-- [ ] requirements.txt作成
-  - [ ] `fastapi`
-  - [ ] `uvicorn[standard]`
-  - [ ] `sqlalchemy`
-  - [ ] `pymysql`
-  - [ ] `alembic` (マイグレーション)
-  - [ ] `pydantic`
-  - [ ] `python-dotenv`
-  - [ ] `httpx` (外部API呼び出し)
-  - [ ] `yfinance` (株価データ)
-  - [ ] `langchain`
-  - [ ] `chromadb`
-  - [ ] `sentence-transformers`
-  - [ ] `apscheduler` (スケジューラー)
-- [ ] 仮想環境作成・パッケージインストール
-- [ ] 環境変数設定 (`.env`)
-- [ ] FastAPI初期設定 (`main.py`)
-  - [ ] CORS設定
-  - [ ] ルーター登録準備
-  - [ ] ヘルスチェックエンドポイント
+- [x] requirements.txt作成
+  - [x] `fastapi`
+  - [x] `uvicorn[standard]`
+  - [x] `sqlalchemy`
+  - [x] `pymysql`
+  - [x] `alembic` (マイグレーション)
+  - [x] `pydantic`
+  - [x] `python-dotenv`
+  - [x] `httpx` (外部API呼び出し)
+  - [x] `yfinance` (株価データ)
+  - [x] `langchain`
+  - [x] `chromadb`
+  - [x] `sentence-transformers`
+  - [x] `apscheduler` (スケジューラー)
+- [x] 仮想環境作成・パッケージインストール
+- [x] 環境変数設定 (`.env`)
+- [x] FastAPI初期設定 (`main.py`)
+  - [x] CORS設定
+  - [x] ルーター登録準備
+  - [x] ヘルスチェックエンドポイント
 
 ### 1.5 データベース設計・マイグレーション
-- [ ] SQLAlchemyモデル作成
-  - [ ] `models/company.py` (企業マスタ)
-  - [ ] `models/financial_data.py` (決算データ)
-  - [ ] `models/stock_price.py` (株価データ)
-  - [ ] `models/portfolio.py` (ポートフォリオ)
-  - [ ] `models/favorite.py` (お気に入り)
-- [ ] Alembic初期化
+- [x] SQLAlchemyモデル作成
+  - [x] `models/company.py` (企業マスタ)
+  - [x] `models/financial_data.py` (決算データ)
+  - [x] `models/stock_price.py` (株価データ)
+  - [x] `models/portfolio.py` (ポートフォリオ)
+  - [x] `models/favorite.py` (お気に入り)
+- [x] Alembic初期化
   ```bash
   alembic init alembic
   ```
-- [ ] `alembic.ini` 設定
-- [ ] 初期マイグレーションファイル作成
+- [x] `alembic.ini` 設定
+- [x] 初期マイグレーションファイル作成
   ```bash
   alembic revision --autogenerate -m "Initial migration"
   ```
-- [ ] マイグレーション実行テスト
+- [x] マイグレーション実行テスト
   ```bash
   alembic upgrade head
   ```
-- [ ] シードデータ作成（テスト用企業データ）
+- [x] シードデータ作成（テスト用企業データ）
 
 ### 1.6 Ollama + LangChain セットアップ
-- [ ] Ollamaインストール確認
+- [x] Ollamaインストール確認
   ```bash
   brew install ollama
   ```
-- [ ] Llama 3.1 8Bモデルダウンロード
+- [x] Llama 3.1 8Bモデルダウンロード
   ```bash
   ollama pull llama3.1:8b
   ```
-- [ ] Ollamaサービス起動確認
+- [x] Ollamaサービス起動確認
   ```bash
   ollama serve
   ```
-- [ ] LangChain統合テスト
-  - [ ] `backend/app/rag/llm_client.py` 作成
-  - [ ] Ollamaとの接続テスト
-  - [ ] サンプルプロンプト実行テスト
-- [ ] ChromaDB接続テスト
-  - [ ] `backend/app/rag/vector_store.py` 作成
-  - [ ] ベクトルDB初期化
-  - [ ] サンプルデータ挿入・検索テスト
+- [x] LangChain統合テスト
+  - [x] `backend/app/rag/llm_client.py` 作成
+  - [x] Ollamaとの接続テスト
+  - [x] サンプルプロンプト実行テスト
+- [x] ChromaDB接続テスト
+  - [x] `backend/app/rag/vector_store.py` 作成
+  - [x] ベクトルDB初期化
+  - [x] サンプルデータ挿入・検索テスト
 
 ### 1.7 開発ツール・補助設定
-- [ ] ESLint・Prettier設定 (フロントエンド)
-- [ ] Black・Flake8設定 (バックエンド)
-- [ ] VSCode設定ファイル (`.vscode/settings.json`)
-- [ ] Git pre-commitフック設定（オプション）
+- [x] ESLint・Prettier設定 (フロントエンド)
+- [x] Black・Flake8設定 (バックエンド)
+- [x] VSCode設定ファイル (`.vscode/settings.json`)
+- [x] Git pre-commitフック設定（オプション）
 
 ---
 
