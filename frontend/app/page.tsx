@@ -3,20 +3,31 @@
 import { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import CompanyInfo from "@/components/CompanyInfo";
+import FinancialTable from "@/components/FinancialTable";
+import RevenueChart from "@/components/charts/RevenueChart";
+import OperatingProfitChart from "@/components/charts/OperatingProfitChart";
+import NetProfitChart from "@/components/charts/NetProfitChart";
 import { CompanySearchResult, Company } from "@/types/company";
+import { FinancialData } from "@/types/financial";
 import { companiesApi } from "@/services/api";
 
 export default function Home() {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [financialData, setFinancialData] = useState<FinancialData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSelectCompany = async (searchResult: CompanySearchResult) => {
     setIsLoading(true);
     try {
-      const company = await companiesApi.get(searchResult.stock_code);
+      const [company, financials] = await Promise.all([
+        companiesApi.get(searchResult.stock_code),
+        companiesApi.getFinancials(searchResult.stock_code),
+      ]);
       setSelectedCompany(company);
+      setFinancialData(financials);
     } catch (error) {
-      console.error("Failed to fetch company:", error);
+      console.error("Failed to fetch company data:", error);
+      setFinancialData([]);
     } finally {
       setIsLoading(false);
     }
@@ -44,10 +55,31 @@ export default function Home() {
           </div>
         )}
 
-        {/* Company Info */}
+        {/* Company Data */}
         {!isLoading && selectedCompany && (
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-7xl mx-auto space-y-6">
+            {/* Company Info */}
             <CompanyInfo company={selectedCompany} />
+
+            {/* Charts */}
+            {financialData.length > 0 && (
+              <>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <RevenueChart data={financialData} />
+                  <OperatingProfitChart data={financialData} />
+                  <NetProfitChart data={financialData} />
+                </div>
+
+                {/* Financial Table */}
+                <FinancialTable data={financialData} />
+              </>
+            )}
+
+            {financialData.length === 0 && (
+              <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                <p className="text-gray-500">決算データが登録されていません</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -58,11 +90,11 @@ export default function Home() {
               ようこそ
             </h2>
             <p className="text-gray-700 mb-4">
-              銘柄コードまたは企業名を入力して、企業情報を検索できます。
+              銘柄コードまたは企業名を入力して、企業情報や決算データを検索できます。
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-800">
-                <strong>Phase 2 実装完了:</strong> 銘柄検索機能、企業情報表示
+                <strong>Phase 2 完全実装:</strong> 銘柄検索、企業情報表示、決算データ、グラフ表示
               </p>
             </div>
           </div>

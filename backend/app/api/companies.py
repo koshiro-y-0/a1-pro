@@ -16,7 +16,10 @@ from app.schemas.company import (
     CompanyCreate
 )
 from app.schemas.stock_price import StockPriceResponse
+from app.schemas.financial_data import FinancialDataResponse, FinancialDataWithMetrics
 from app.services.yfinance_client import yfinance_client
+from app.services.financial_calculator import financial_calculator
+from app.models.financial_data import FinancialData
 
 router = APIRouter()
 
@@ -122,3 +125,53 @@ async def get_stock_prices(
         "period": period,
         "data": stock_data
     }
+
+
+@router.get("/{stock_code}/financials", response_model=List[FinancialDataWithMetrics])
+async def get_financials(
+    stock_code: str,
+    db: Session = Depends(get_db)
+):
+    """
+    決算データ取得
+
+    - 企業の過去の決算データを取得
+    - 財務指標も自動計算して返却
+    """
+    # 企業を検索
+    company = db.query(Company).filter(
+        Company.stock_code == stock_code
+    ).first()
+
+    if not company:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Company with stock code {stock_code} not found"
+        )
+
+    # 決算データ取得（通期のみ、fiscal_quarter is null）
+    financial_data_list = db.query(FinancialData).filter(
+        FinancialData.company_id == company.id,
+        FinancialData.fiscal_quarter.is_(None)
+    ).order_by(FinancialData.fiscal_year.desc()).limit(10).all()
+
+    # 財務指標を計算して追加
+    result = []
+    for fd in financial_data_list:
+        metrics = financial_calculator.calculate_all_metrics(
+            revenue=fd.revenue,
+            operating_profit=fd.operating_profit,
+            net_profit=fd.net_profit,
+            total_assets=fd.total_assets,
+            equity=fd.equity,
+            total_liabilities=fd.total_liabilities,
+            current_assets=fd.current_assets,
+            current_liabilities=fd.current_liabilities
+        )
+
+        result.append({
+            **fd.__dict__,
+            "metrics": metrics
+        })
+
+    return result
