@@ -50,3 +50,11 @@ class FinancialMetrics(BaseModel):
 class FinancialDataWithMetrics(FinancialDataResponse):
     """財務指標付き決算データ"""
     metrics: FinancialMetrics
+
+
+class CombinedDataResponse(BaseModel):
+    """複合データレスポンススキーマ"""
+    fiscal_year: int
+    revenue: Optional[int] = None
+    ordinary_profit: Optional[int] = None
+    stock_price: Optional[float] = None

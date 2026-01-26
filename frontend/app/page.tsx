@@ -7,27 +7,37 @@ import FinancialTable from "@/components/FinancialTable";
 import RevenueChart from "@/components/charts/RevenueChart";
 import OperatingProfitChart from "@/components/charts/OperatingProfitChart";
 import NetProfitChart from "@/components/charts/NetProfitChart";
+import EquityRatioChart from "@/components/charts/EquityRatioChart";
+import CurrentRatioChart from "@/components/charts/CurrentRatioChart";
+import ROEChart from "@/components/charts/ROEChart";
+import OperatingMarginChart from "@/components/charts/OperatingMarginChart";
+import CombinedChart from "@/components/charts/CombinedChart";
+import FinancialHealthIndicator from "@/components/FinancialHealthIndicator";
 import { CompanySearchResult, Company } from "@/types/company";
-import { FinancialData } from "@/types/financial";
+import { FinancialData, CombinedData } from "@/types/financial";
 import { companiesApi } from "@/services/api";
 
 export default function Home() {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [financialData, setFinancialData] = useState<FinancialData[]>([]);
+  const [combinedData, setCombinedData] = useState<CombinedData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSelectCompany = async (searchResult: CompanySearchResult) => {
     setIsLoading(true);
     try {
-      const [company, financials] = await Promise.all([
+      const [company, financials, combined] = await Promise.all([
         companiesApi.get(searchResult.stock_code),
         companiesApi.getFinancials(searchResult.stock_code),
+        companiesApi.getCombinedData(searchResult.stock_code),
       ]);
       setSelectedCompany(company);
       setFinancialData(financials);
+      setCombinedData(combined);
     } catch (error) {
       console.error("Failed to fetch company data:", error);
       setFinancialData([]);
+      setCombinedData([]);
     } finally {
       setIsLoading(false);
     }
@@ -61,6 +71,11 @@ export default function Home() {
             {/* Company Info */}
             <CompanyInfo company={selectedCompany} />
 
+            {/* Financial Health Indicator */}
+            {financialData.length > 0 && (
+              <FinancialHealthIndicator data={financialData} />
+            )}
+
             {/* Charts */}
             {financialData.length > 0 && (
               <>
@@ -69,6 +84,19 @@ export default function Home() {
                   <OperatingProfitChart data={financialData} />
                   <NetProfitChart data={financialData} />
                 </div>
+
+                {/* Financial Indicator Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <EquityRatioChart data={financialData} />
+                  <CurrentRatioChart data={financialData} />
+                  <ROEChart data={financialData} />
+                  <OperatingMarginChart data={financialData} />
+                </div>
+
+                {/* Combined Chart */}
+                {combinedData.length > 0 && (
+                  <CombinedChart data={combinedData} />
+                )}
 
                 {/* Financial Table */}
                 <FinancialTable data={financialData} />

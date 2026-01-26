@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { FinancialData } from "@/types/financial";
 import chartColors from "@/lib/chartColors";
@@ -9,17 +10,61 @@ interface RevenueChartProps {
 }
 
 export default function RevenueChart({ data }: RevenueChartProps) {
-  // データを逆順にして古い年度から表示
-  const chartData = [...data].reverse().map((item) => ({
-    year: `${item.fiscal_year}年`,
-    revenue: item.revenue ? item.revenue / 100000000 : null, // 億円に変換
-  }));
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const reversedData = [...data].reverse();
+  const chartData = reversedData.map((item, index) => {
+    const revenue = item.revenue ? item.revenue / 100000000 : null;
+    const prevRevenue = index > 0 && reversedData[index - 1].revenue
+      ? reversedData[index - 1].revenue / 100000000
+      : null;
+
+    const yoyGrowth = revenue !== null && prevRevenue !== null
+      ? ((revenue - prevRevenue) / prevRevenue) * 100
+      : null;
+
+    return {
+      year: `${item.fiscal_year}年`,
+      revenue,
+      yoyGrowth,
+    };
+  });
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white border border-gray-300 rounded-lg p-3 shadow-lg">
+          <p className="font-semibold text-gray-900">{data.year}</p>
+          <p className="text-sm" style={{ color: chartColors.revenue }}>
+            売上高: {data.revenue !== null ? `${data.revenue.toFixed(2)} 億円` : "N/A"}
+          </p>
+          {data.yoyGrowth !== null && (
+            <p className={`text-sm ${data.yoyGrowth >= 0 ? "text-green-600" : "text-red-600"}`}>
+              前年比: {data.yoyGrowth >= 0 ? "+" : ""}{data.yoyGrowth.toFixed(2)}%
+            </p>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">売上高推移</h3>
       <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={chartData}>
+        <LineChart
+          data={chartData}
+          onMouseMove={(state: any) => {
+            if (state.isTooltipActive) {
+              setActiveIndex(state.activeTooltipIndex);
+            } else {
+              setActiveIndex(null);
+            }
+          }}
+          onMouseLeave={() => setActiveIndex(null)}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
           <XAxis
             dataKey="year"
@@ -31,24 +76,28 @@ export default function RevenueChart({ data }: RevenueChartProps) {
             style={{ fontSize: "12px" }}
             label={{ value: "億円", angle: -90, position: "insideLeft" }}
           />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-            }}
-            formatter={(value: any) => [
-              `${Number(value).toFixed(2)} 億円`,
-              "売上高",
-            ]}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
             dataKey="revenue"
             stroke={chartColors.revenue}
             strokeWidth={2}
-            dot={{ fill: chartColors.revenue, r: 4 }}
-            activeDot={{ r: 6 }}
+            dot={(props: any) => {
+              const { cx, cy, index } = props;
+              const isActive = index === activeIndex;
+              return (
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={isActive ? 6 : 4}
+                  fill={chartColors.revenue}
+                  stroke="white"
+                  strokeWidth={isActive ? 2 : 0}
+                  style={{ cursor: "pointer" }}
+                />
+              );
+            }}
+            activeDot={{ r: 8, strokeWidth: 2, stroke: "white" }}
           />
         </LineChart>
       </ResponsiveContainer>

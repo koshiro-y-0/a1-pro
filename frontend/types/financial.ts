@@ -28,3 +28,10 @@ export interface FinancialData {
   created_at: string;
   metrics: FinancialMetrics;
 }
+
+export interface CombinedData {
+  fiscal_year: number;
+  revenue: number | null;
+  ordinary_profit: number | null;
+  stock_price: number | null;
+}

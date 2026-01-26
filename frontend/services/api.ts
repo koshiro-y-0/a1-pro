@@ -5,7 +5,7 @@
 
 import axios from "axios";
 import { Company, CompanySearchResult } from "@/types/company";
-import { FinancialData } from "@/types/financial";
+import { FinancialData, CombinedData } from "@/types/financial";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -33,6 +33,11 @@ export const companiesApi = {
 
   getFinancials: async (stockCode: string): Promise<FinancialData[]> => {
     const response = await apiClient.get(`/api/companies/${stockCode}/financials`);
+    return response.data;
+  },
+
+  getCombinedData: async (stockCode: string): Promise<CombinedData[]> => {
+    const response = await apiClient.get(`/api/companies/${stockCode}/combined`);
     return response.data;
   },
 };
