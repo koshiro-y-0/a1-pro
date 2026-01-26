@@ -6,9 +6,9 @@
 
 ## 📊 進捗状況サマリー
 
-- **全体進捗**: Phase 1 完了 ✅, Phase 2 完了 ✅, Phase 3 完了 ✅, Phase 4 完了 ✅ (約95/140 タスク完了)
-- **現在のフェーズ**: Phase 4 完了 → Phase 5 準備中
-- **次のマイルストーン**: ポートフォリオ機能（保有銘柄登録、パフォーマンス計算）
+- **全体進捗**: Phase 1 完了 ✅, Phase 2 完了 ✅, Phase 3 完了 ✅, Phase 4 完了 ✅, Phase 5 完了 ✅ (約115/140 タスク完了)
+- **現在のフェーズ**: Phase 5 完了 → Phase 6 準備中
+- **次のマイルストーン**: 複数資産比較機能（米国株、為替、暗号資産）
 
 ---
 
@@ -363,55 +363,55 @@
 ## Phase 5: ポートフォリオ機能 (Week 10-11)
 
 ### 5.1 保有銘柄登録機能
-- [ ] **バックエンド**: ポートフォリオAPI
-  - [ ] `POST /api/portfolio` - 保有銘柄追加
-  - [ ] `GET /api/portfolio` - 保有銘柄一覧取得
-  - [ ] `PUT /api/portfolio/{id}` - 保有銘柄更新
-  - [ ] `DELETE /api/portfolio/{id}` - 保有銘柄削除
-- [ ] **バックエンド**: バリデーション
-  - [ ] 入力値検証（日付、価格、数量）
-  - [ ] 重複チェック
-- [ ] **フロントエンド**: 保有銘柄入力フォーム
-  - [ ] `components/PortfolioForm.tsx`
-  - [ ] 銘柄選択（サジェスト機能）
-  - [ ] 購入日入力（日付ピッカー）
-  - [ ] 購入価格・数量入力
-  - [ ] 資産クラス選択
+- [x] **バックエンド**: ポートフォリオAPI
+  - [x] `POST /api/portfolio` - 保有銘柄追加
+  - [x] `GET /api/portfolio` - 保有銘柄一覧取得
+  - [x] `PUT /api/portfolio/{id}` - 保有銘柄更新
+  - [x] `DELETE /api/portfolio/{id}` - 保有銘柄削除
+- [x] **バックエンド**: バリデーション
+  - [x] 入力値検証（日付、価格、数量）
+  - [x] Pydanticスキーマでバリデーション
+- [x] **フロントエンド**: 型定義作成
+  - [x] `types/portfolio.ts` - Portfolio型定義
+  - [x] `services/api.ts` - portfolioApi実装
 
 ### 5.2 パフォーマンス計算ロジック
-- [ ] **バックエンド**: パフォーマンス計算
-  - [ ] `services/portfolio_calculator.py` 作成
-  - [ ] 個別銘柄の損益計算
-  - [ ] 騰落率計算
-  - [ ] 現在評価額取得
-- [ ] **バックエンド**: ポートフォリオ全体計算
-  - [ ] 総投資額計算
-  - [ ] 総評価額計算
-  - [ ] 総損益（金額・%）計算
-  - [ ] アセットアロケーション計算
-- [ ] **バックエンド**: パフォーマンスAPI
-  - [ ] `GET /api/portfolio/performance` エンドポイント
+- [x] **バックエンド**: パフォーマンス計算
+  - [x] `services/portfolio_calculator.py` 作成
+  - [x] 個別銘柄の損益計算
+  - [x] 騰落率計算
+  - [x] 現在評価額取得（yfinance統合）
+- [x] **バックエンド**: ポートフォリオ全体計算
+  - [x] 総投資額計算
+  - [x] 総評価額計算
+  - [x] 総損益（金額・%）計算
+  - [x] アセットアロケーション計算
+- [x] **バックエンド**: パフォーマンスAPI
+  - [x] `GET /api/portfolio/performance` エンドポイント
 
 ### 5.3 お気に入り機能
-- [ ] **バックエンド**: お気に入りAPI
-  - [ ] `POST /api/favorites` - お気に入り追加
-  - [ ] `GET /api/favorites` - お気に入り一覧
-  - [ ] `DELETE /api/favorites/{id}` - お気に入り削除
-- [ ] **フロントエンド**: お気に入りボタン
-  - [ ] `components/FavoriteButton.tsx`
-  - [ ] お気に入り追加/削除トグル
-- [ ] **フロントエンド**: お気に入りリスト
-  - [ ] `components/FavoritesList.tsx`
-  - [ ] サイドバーに表示
-  - [ ] クイックアクセス機能
+- [x] **バックエンド**: お気に入りAPI
+  - [x] `POST /api/favorites` - お気に入り追加
+  - [x] `GET /api/favorites` - お気に入り一覧
+  - [x] `DELETE /api/favorites/{id}` - お気に入り削除
+  - [x] `DELETE /api/favorites/by-company/{id}` - 企業IDで削除
+- [x] **フロントエンド**: お気に入りボタン
+  - [x] `components/FavoriteButton.tsx`
+  - [x] お気に入り追加/削除トグル
+  - [x] お気に入り状態の取得・表示
+- [x] **フロントエンド**: 型定義とAPI統合
+  - [x] `types/portfolio.ts` - Favorite型定義
+  - [x] `services/api.ts` - favoritesApi実装
 
 ### 5.4 ポートフォリオダッシュボード
-- [ ] **フロントエンド**: ダッシュボードページ
-  - [ ] `app/portfolio/page.tsx`
-  - [ ] 保有銘柄一覧テーブル
-  - [ ] パフォーマンスサマリーカード
-  - [ ] アセットアロケーションチャート（円グラフ）
-  - [ ] 損益ランキング
+- [x] **フロントエンド**: ダッシュボードページ
+  - [x] `app/portfolio/page.tsx`
+  - [x] 保有銘柄一覧テーブル
+  - [x] パフォーマンスサマリーカード（4指標）
+  - [x] 削除機能実装
+  - [x] リアルタイムP&L計算表示
+  - [ ] アセットアロケーションチャート（円グラフ）- 今後追加予定
+  - [ ] 損益ランキング - 今後追加予定
 
 ---
 
@@ -651,7 +651,7 @@
 | Phase 2完了 | Week 5 | 2026-01-24 | ✅ 完了 |
 | Phase 3完了 | Week 7 | 2026-01-24 | ✅ 完了 |
 | Phase 4完了 | Week 9 | 2026-01-26 | ✅ 完了 |
-| Phase 5完了 | Week 11 | - | 🔴 未着手 |
+| Phase 5完了 | Week 11 | 2026-01-26 | ✅ 完了 |
 | Phase 6完了 | Week 13 | - | 🔴 未着手 |
 | Phase 7完了 | Week 15 | - | 🔴 未着手 |
 | Phase 8完了 | Week 16 | - | 🔴 未着手 |

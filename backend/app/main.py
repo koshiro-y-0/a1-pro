@@ -45,12 +45,9 @@ async def health_check():
 
 
 # ルーター登録
-from app.api import companies, chat
+from app.api import companies, chat, portfolio, favorites
 
 app.include_router(companies.router, prefix="/api/companies", tags=["companies"])
 app.include_router(chat.router, prefix="/api", tags=["chat"])
-
-# 今後追加予定
-# from app.api import portfolio, favorites
-# app.include_router(portfolio.router, prefix="/api/portfolio", tags=["portfolio"])
-# app.include_router(favorites.router, prefix="/api/favorites", tags=["favorites"])
+app.include_router(portfolio.router, prefix="/api/portfolio", tags=["portfolio"])
+app.include_router(favorites.router, prefix="/api/favorites", tags=["favorites"])
