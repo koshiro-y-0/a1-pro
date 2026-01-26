@@ -6,6 +6,7 @@
 import axios from "axios";
 import { Company, CompanySearchResult } from "@/types/company";
 import { FinancialData, CombinedData } from "@/types/financial";
+import { ChatRequest, ChatResponse } from "@/types/chat";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -38,6 +39,24 @@ export const companiesApi = {
 
   getCombinedData: async (stockCode: string): Promise<CombinedData[]> => {
     const response = await apiClient.get(`/api/companies/${stockCode}/combined`);
+    return response.data;
+  },
+};
+
+// Chat API
+export const chatApi = {
+  sendMessage: async (request: ChatRequest): Promise<ChatResponse> => {
+    const response = await apiClient.post("/api/chat", request);
+    return response.data;
+  },
+
+  createIndex: async (stockCode: string): Promise<{ message: string; chunks_count: number }> => {
+    const response = await apiClient.post("/api/chat/index", { stock_code: stockCode });
+    return response.data;
+  },
+
+  getStats: async (): Promise<{ total_documents: number; collection_name: string }> => {
+    const response = await apiClient.get("/api/chat/stats");
     return response.data;
   },
 };

@@ -13,6 +13,7 @@ import ROEChart from "@/components/charts/ROEChart";
 import OperatingMarginChart from "@/components/charts/OperatingMarginChart";
 import CombinedChart from "@/components/charts/CombinedChart";
 import FinancialHealthIndicator from "@/components/FinancialHealthIndicator";
+import ChatBot from "@/components/ChatBot";
 import { CompanySearchResult, Company } from "@/types/company";
 import { FinancialData, CombinedData } from "@/types/financial";
 import { companiesApi } from "@/services/api";
@@ -128,6 +129,12 @@ export default function Home() {
           </div>
         )}
       </main>
+
+      {/* Chat Bot */}
+      <ChatBot
+        stockCode={selectedCompany?.stock_code}
+        companyName={selectedCompany?.name}
+      />
     </div>
   );
 }

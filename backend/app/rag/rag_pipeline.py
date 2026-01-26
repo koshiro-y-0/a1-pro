@@ -3,9 +3,9 @@ RAG Pipeline
 Retrieval-Augmented Generation pipeline for question answering
 """
 
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 from app.rag.llm_client import ollama_client
-from app.rag.vector_store import vector_store
+from app.rag.embedding import embedding_service
 
 
 class RAGPipeline:
@@ -13,7 +13,7 @@ class RAGPipeline:
 
     def __init__(self):
         self.llm = ollama_client
-        self.vector_store = vector_store
+        self.embedding_service = embedding_service
 
     def _create_prompt(self, question: str, context: str) -> str:
         """
@@ -47,7 +47,7 @@ class RAGPipeline:
     def answer_question(
         self,
         question: str,
-        company_context: Optional[str] = None,
+        stock_code: Optional[str] = None,
         n_results: int = 5
     ) -> Dict:
         """
@@ -55,34 +55,32 @@ class RAGPipeline:
 
         Args:
             question: User question
-            company_context: Optional company context (stock code, name)
+            stock_code: Optional stock code to filter results
             n_results: Number of documents to retrieve
 
         Returns:
             Dict with answer and sources
         """
-        # Search for relevant documents
-        search_results = self.vector_store.search(
+        # Search for relevant documents using embedding service
+        search_results = self.embedding_service.search_similar(
             query=question,
-            n_results=n_results
+            n_results=n_results,
+            stock_code=stock_code
         )
 
-        # Extract documents
-        documents = search_results.get('documents', [[]])[0]
-        metadatas = search_results.get('metadatas', [[]])[0]
-
-        if not documents:
+        if not search_results:
             return {
                 "answer": "関連する情報が見つかりませんでした。",
                 "sources": []
             }
 
         # Combine documents into context
-        context = "\n\n".join(documents)
+        context_parts = []
+        for i, result in enumerate(search_results, 1):
+            context_parts.append(f"【情報{i}】")
+            context_parts.append(result["text"])
 
-        # Add company context if provided
-        if company_context:
-            context = f"【企業情報】\n{company_context}\n\n{context}"
+        context = "\n\n".join(context_parts)
 
         # Create prompt
         prompt = self._create_prompt(question, context)
@@ -93,10 +91,10 @@ class RAGPipeline:
         # Prepare sources
         sources = [
             {
-                "text": doc,
-                "metadata": meta
+                "text": result["text"],
+                "metadata": result["metadata"]
             }
-            for doc, meta in zip(documents, metadatas)
+            for result in search_results
         ]
 
         return {
@@ -107,7 +105,7 @@ class RAGPipeline:
     async def aanswer_question(
         self,
         question: str,
-        company_context: Optional[str] = None,
+        stock_code: Optional[str] = None,
         n_results: int = 5
     ) -> Dict:
         """
@@ -115,43 +113,46 @@ class RAGPipeline:
 
         Args:
             question: User question
-            company_context: Optional company context
+            stock_code: Optional stock code to filter results
             n_results: Number of documents to retrieve
 
         Returns:
             Dict with answer and sources
         """
         # Search for relevant documents
-        search_results = self.vector_store.search(
+        search_results = self.embedding_service.search_similar(
             query=question,
-            n_results=n_results
+            n_results=n_results,
+            stock_code=stock_code
         )
 
-        documents = search_results.get('documents', [[]])[0]
-        metadatas = search_results.get('metadatas', [[]])[0]
-
-        if not documents:
+        if not search_results:
             return {
                 "answer": "関連する情報が見つかりませんでした。",
                 "sources": []
             }
 
-        context = "\n\n".join(documents)
+        # Combine documents into context
+        context_parts = []
+        for i, result in enumerate(search_results, 1):
+            context_parts.append(f"【情報{i}】")
+            context_parts.append(result["text"])
 
-        if company_context:
-            context = f"【企業情報】\n{company_context}\n\n{context}"
+        context = "\n\n".join(context_parts)
 
+        # Create prompt
         prompt = self._create_prompt(question, context)
 
         # Async generate answer
         answer = await self.llm.agenerate(prompt)
 
+        # Prepare sources
         sources = [
             {
-                "text": doc,
-                "metadata": meta
+                "text": result["text"],
+                "metadata": result["metadata"]
             }
-            for doc, meta in zip(documents, metadatas)
+            for result in search_results
         ]
 
         return {
