@@ -51,7 +51,7 @@ export default function NetProfitChart({ data }: NetProfitChartProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="card card-hover p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">純利益推移</h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart

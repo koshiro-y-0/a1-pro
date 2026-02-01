@@ -17,6 +17,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import Loading from "@/components/Loading";
+import PageTransition from "@/components/PageTransition";
+import MobileMenu from "@/components/MobileMenu";
 
 const ASSET_TYPE_LABELS: Record<string, string> = {
   jp_stock: "日本株",
@@ -121,12 +124,13 @@ export default function ComparePage() {
     : [];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">資産パフォーマンス比較</h1>
+    <div className="min-h-screen bg-gray-50">
+      <MobileMenu />
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold mb-8 animate-fadeInDown">資産パフォーマンス比較</h1>
 
         {/* 資産追加フォーム */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="card p-6 mb-6 animate-fadeIn">
           <h2 className="text-xl font-semibold mb-4">資産を追加</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -141,7 +145,7 @@ export default function ComparePage() {
                   setNewAsset({ ...newAsset, symbol: e.target.value })
                 }
                 placeholder="例: 7203, AAPL, BTC"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="input"
               />
             </div>
 
@@ -157,7 +161,7 @@ export default function ComparePage() {
                     asset_type: e.target.value as any,
                   })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="input"
               >
                 <option value="jp_stock">日本株</option>
                 <option value="us_stock">米国株</option>
@@ -177,14 +181,14 @@ export default function ComparePage() {
                   setNewAsset({ ...newAsset, name: e.target.value })
                 }
                 placeholder="例: トヨタ"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="input"
               />
             </div>
 
             <div className="flex items-end">
               <button
                 onClick={handleAddAsset}
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="btn btn-primary w-full"
               >
                 追加
               </button>
@@ -220,7 +224,7 @@ export default function ComparePage() {
         </div>
 
         {/* 期間選択と比較実行 */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="card p-6 mb-6 animate-fadeIn">
           <div className="flex items-end gap-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -229,7 +233,7 @@ export default function ComparePage() {
               <select
                 value={period}
                 onChange={(e) => setPeriod(e.target.value as any)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="input"
               >
                 {PERIOD_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -242,7 +246,7 @@ export default function ComparePage() {
             <button
               onClick={handleCompare}
               disabled={isLoading || assets.length === 0}
-              className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="btn btn-success px-6"
             >
               {isLoading ? "比較中..." : "比較実行"}
             </button>
@@ -258,9 +262,9 @@ export default function ComparePage() {
 
         {/* 比較結果 */}
         {compareResult && (
-          <>
+          <PageTransition>
             {/* パフォーマンスグラフ */}
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <div className="card p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">
                 正規化パフォーマンス推移（基準日=100）
               </h2>
@@ -297,7 +301,7 @@ export default function ComparePage() {
             </div>
 
             {/* パフォーマンスランキング */}
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="card p-6 animate-fadeIn">
               <h2 className="text-xl font-semibold mb-4">パフォーマンスランキング</h2>
 
               <div className="overflow-x-auto">
@@ -362,7 +366,7 @@ export default function ComparePage() {
                 </table>
               </div>
             </div>
-          </>
+          </PageTransition>
         )}
       </div>
     </div>

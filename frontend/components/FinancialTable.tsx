@@ -25,10 +25,10 @@ export default function FinancialTable({ data }: FinancialTableProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="card card-hover p-4 sm:p-6">
       <h3 className="text-xl font-bold text-gray-900 mb-4">決算データ</h3>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto -mx-4 sm:mx-0">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>

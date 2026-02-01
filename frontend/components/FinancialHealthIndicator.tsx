@@ -95,7 +95,7 @@ export default function FinancialHealthIndicator({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="card card-hover p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">財務健全性判定</h3>
 
       {/* Overall Status */}

@@ -7,6 +7,9 @@ import {
   PortfolioPerformance,
 } from "@/types/portfolio";
 import Link from "next/link";
+import Loading from "@/components/Loading";
+import PageTransition from "@/components/PageTransition";
+import MobileMenu from "@/components/MobileMenu";
 
 export default function PortfolioPage() {
   const [portfolio, setPortfolio] = useState<PortfolioWithPerformance[]>([]);
@@ -62,44 +65,43 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <MobileMenu />
+      <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 animate-fadeInDown">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">ポートフォリオ</h1>
             <p className="text-gray-600 mt-1">保有銘柄とパフォーマンス</p>
           </div>
           <Link
             href="/"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="btn btn-primary"
           >
             ホームに戻る
           </Link>
         </div>
 
         {isLoading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
-            <p className="mt-4 text-gray-600">読み込み中...</p>
-          </div>
+          <Loading text="読み込み中..." />
         ) : (
+          <PageTransition>
           <>
             {/* Performance Summary */}
             {performance && (
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="card card-hover p-6">
                   <p className="text-sm text-gray-600 mb-1">総投資額</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {formatCurrency(performance.total_purchase_value)}
                   </p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="card card-hover p-6">
                   <p className="text-sm text-gray-600 mb-1">現在評価額</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {formatCurrency(performance.total_current_value)}
                   </p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="card card-hover p-6">
                   <p className="text-sm text-gray-600 mb-1">損益</p>
                   <p
                     className={`text-2xl font-bold ${
@@ -111,7 +113,7 @@ export default function PortfolioPage() {
                     {formatCurrency(performance.total_profit_loss)}
                   </p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="card card-hover p-6">
                   <p className="text-sm text-gray-600 mb-1">損益率</p>
                   <p
                     className={`text-2xl font-bold ${
@@ -127,7 +129,7 @@ export default function PortfolioPage() {
             )}
 
             {/* Portfolio Table */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="card overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900">
                   保有銘柄一覧
@@ -224,7 +226,7 @@ export default function PortfolioPage() {
                           <td className="px-6 py-4 text-center">
                             <button
                               onClick={() => handleDelete(item.id)}
-                              className="text-red-600 hover:text-red-800 text-sm"
+                              className="btn btn-danger text-sm"
                             >
                               削除
                             </button>
@@ -236,7 +238,7 @@ export default function PortfolioPage() {
                 </div>
               )}
             </div>
-          </>
+          </PageTransition>
         )}
       </div>
     </div>

@@ -14,6 +14,9 @@ import OperatingMarginChart from "@/components/charts/OperatingMarginChart";
 import CombinedChart from "@/components/charts/CombinedChart";
 import FinancialHealthIndicator from "@/components/FinancialHealthIndicator";
 import ChatBot from "@/components/ChatBot";
+import Loading from "@/components/Loading";
+import PageTransition from "@/components/PageTransition";
+import MobileMenu from "@/components/MobileMenu";
 import { CompanySearchResult, Company } from "@/types/company";
 import { FinancialData, CombinedData } from "@/types/financial";
 import { companiesApi } from "@/services/api";
@@ -46,31 +49,28 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto px-4 py-8">
+      <MobileMenu />
+      <main className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">A1-PRO</h1>
-          <p className="text-lg text-gray-600">日本株分析Webアプリケーション</p>
+        <div className="text-center mb-12 animate-fadeInDown">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">A1-PRO</h1>
+          <p className="text-base sm:text-lg text-gray-600">日本株分析Webアプリケーション</p>
         </div>
 
         {/* Search Bar */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-8 animate-fadeIn">
           <SearchBar onSelectCompany={handleSelectCompany} />
         </div>
 
         {/* Loading */}
-        {isLoading && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-            <p className="mt-4 text-gray-600">読み込み中...</p>
-          </div>
-        )}
+        {isLoading && <Loading text="読み込み中..." />}
 
         {/* Company Data */}
         {!isLoading && selectedCompany && (
-          <div className="max-w-7xl mx-auto space-y-6">
-            {/* Company Info */}
-            <CompanyInfo company={selectedCompany} />
+          <PageTransition>
+            <div className="max-w-7xl mx-auto space-y-6">
+              {/* Company Info */}
+              <CompanyInfo company={selectedCompany} />
 
             {/* Financial Health Indicator */}
             {financialData.length > 0 && (
@@ -80,14 +80,14 @@ export default function Home() {
             {/* Charts */}
             {financialData.length > 0 && (
               <>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <RevenueChart data={financialData} />
                   <OperatingProfitChart data={financialData} />
                   <NetProfitChart data={financialData} />
                 </div>
 
                 {/* Financial Indicator Charts */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <EquityRatioChart data={financialData} />
                   <CurrentRatioChart data={financialData} />
                   <ROEChart data={financialData} />
@@ -104,17 +104,18 @@ export default function Home() {
               </>
             )}
 
-            {financialData.length === 0 && (
-              <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                <p className="text-gray-500">決算データが登録されていません</p>
-              </div>
-            )}
-          </div>
+              {financialData.length === 0 && (
+                <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                  <p className="text-gray-500">決算データが登録されていません</p>
+                </div>
+              )}
+            </div>
+          </PageTransition>
         )}
 
         {/* Welcome Message */}
         {!isLoading && !selectedCompany && (
-          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 text-center">
+          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 text-center animate-scaleIn">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
               ようこそ
             </h2>

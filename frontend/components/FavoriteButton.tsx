@@ -62,16 +62,18 @@ export default function FavoriteButton({
     <button
       onClick={handleToggle}
       disabled={isLoading}
-      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+      className={`btn flex items-center space-x-2 transition-smooth transform hover:scale-105 ${
         isFavorite
-          ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-      } disabled:opacity-50 disabled:cursor-not-allowed`}
+          ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200 focus:ring-yellow-400"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-400"
+      }`}
       title={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5"
+        className={`h-5 w-5 transition-transform duration-300 ${
+          isFavorite ? "scale-110" : ""
+        }`}
         fill={isFavorite ? "currentColor" : "none"}
         viewBox="0 0 24 24"
         stroke="currentColor"

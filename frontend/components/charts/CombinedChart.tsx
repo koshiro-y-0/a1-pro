@@ -27,7 +27,7 @@ export default function CombinedChart({ data }: CombinedChartProps) {
   }));
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="card card-hover p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
         売上高・経常利益・株価推移
       </h3>

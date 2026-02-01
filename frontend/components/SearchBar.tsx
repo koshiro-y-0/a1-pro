@@ -55,7 +55,7 @@ export default function SearchBar({ onSelectCompany }: SearchBarProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="銘柄コードまたは企業名を入力..."
-          className="w-full px-4 py-3 pr-10 text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          className="input transition-smooth hover:border-primary/50"
         />
         {isLoading && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -66,12 +66,12 @@ export default function SearchBar({ onSelectCompany }: SearchBarProps) {
 
       {/* 検索結果 */}
       {showResults && results.length > 0 && (
-        <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+        <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto animate-fadeInDown">
           {results.map((company) => (
             <button
               key={company.id}
               onClick={() => handleSelectCompany(company)}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+              className="w-full px-4 py-3 text-left hover:bg-blue-50 transition-smooth border-b border-gray-100 last:border-b-0 hover-lift"
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -91,7 +91,7 @@ export default function SearchBar({ onSelectCompany }: SearchBarProps) {
 
       {/* 検索結果なし */}
       {showResults && results.length === 0 && !isLoading && query.length > 0 && (
-        <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-center text-gray-500">
+        <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-center text-gray-500 animate-fadeInDown">
           該当する銘柄が見つかりませんでした
         </div>
       )}
