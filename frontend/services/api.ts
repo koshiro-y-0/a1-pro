@@ -15,6 +15,7 @@ import {
   FavoriteCreate,
   FavoriteWithCompany,
 } from "@/types/portfolio";
+import { CompareRequest, CompareResponse } from "@/types/compare";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -116,6 +117,14 @@ export const favoritesApi = {
 
   deleteByCompany: async (companyId: number): Promise<{ message: string }> => {
     const response = await apiClient.delete(`/api/favorites/by-company/${companyId}`);
+    return response.data;
+  },
+};
+
+// Compare API
+export const compareApi = {
+  compare: async (request: CompareRequest): Promise<CompareResponse> => {
+    const response = await apiClient.post("/api/compare", request);
     return response.data;
   },
 };
