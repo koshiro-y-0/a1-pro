@@ -198,7 +198,7 @@ body {
   .input {
     @apply w-full px-4 py-3 bg-white border border-gray-300 rounded-lg;
     @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
-    @apply transition-all duration-300;
+    @apply transition-all duration-300 text-gray-900;
   }
 }
 

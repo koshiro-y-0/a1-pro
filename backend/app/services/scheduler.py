@@ -9,7 +9,7 @@ from datetime import datetime
 import logging
 from typing import Optional
 
-from app.db.session import get_db
+from app.db.database import get_db
 from app.models.favorite import Favorite
 from app.models.company import Company
 from app.services.buffett_code_client import buffett_code_client

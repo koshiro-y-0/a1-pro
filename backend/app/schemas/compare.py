@@ -4,7 +4,7 @@ Compare Schemas
 """
 
 from pydantic import BaseModel, Field
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from datetime import date
 
 
@@ -45,4 +45,4 @@ class CompareResponse(BaseModel):
     assets: List[AssetPerformance]
     start_date: str
     end_date: str
-    ranking: List[Dict[str, any]] = Field(..., description="パフォーマンスランキング")
+    ranking: List[Dict[str, Any]] = Field(..., description="パフォーマンスランキング")

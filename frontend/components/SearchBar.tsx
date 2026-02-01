@@ -55,7 +55,7 @@ export default function SearchBar({ onSelectCompany }: SearchBarProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="銘柄コードまたは企業名を入力..."
-          className="input transition-smooth hover:border-primary/50"
+          className="input transition-smooth hover:border-primary/50 text-gray-900"
         />
         {isLoading && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
