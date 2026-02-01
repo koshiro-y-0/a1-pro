@@ -4,7 +4,7 @@ Portfolio API Endpoints
 """
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 
 from app.db.database import get_db

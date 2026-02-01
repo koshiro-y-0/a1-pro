@@ -20,6 +20,7 @@ from app.schemas.financial_data import FinancialDataResponse, FinancialDataWithM
 from app.services.yfinance_client import yfinance_client
 from app.services.financial_calculator import financial_calculator
 from app.models.financial_data import FinancialData
+from app.services.cache_service import cache_service, CACHE_TTL_STOCK_PRICE, CACHE_TTL_FINANCIAL
 
 router = APIRouter()
 
@@ -106,11 +107,20 @@ async def get_stock_prices(
     period: str = Query("1mo", description="期間 (1d, 5d, 1mo, 3mo, 6mo, 1y, 5y)")
 ):
     """
-    株価データ取得
+    株価データ取得（キャッシュ対応）
 
     - Yahoo Finance から株価データを取得
     - 期間指定可能
+    - 15分間キャッシュ
     """
+    # キャッシュキー生成
+    cache_key = f"stock_prices:{stock_code}:{period}"
+
+    # キャッシュチェック
+    cached_data = cache_service.get(cache_key)
+    if cached_data is not None:
+        return cached_data
+
     # 株価データ取得
     stock_data = yfinance_client.get_stock_data_dict(stock_code, period)
 
@@ -120,11 +130,16 @@ async def get_stock_prices(
             detail=f"Stock price data for {stock_code} not found"
         )
 
-    return {
+    response = {
         "stock_code": stock_code,
         "period": period,
         "data": stock_data
     }
+
+    # キャッシュに保存（15分）
+    cache_service.set(cache_key, response, CACHE_TTL_STOCK_PRICE)
+
+    return response
 
 
 @router.get("/{stock_code}/financials", response_model=List[FinancialDataWithMetrics])
@@ -133,11 +148,20 @@ async def get_financials(
     db: Session = Depends(get_db)
 ):
     """
-    決算データ取得
+    決算データ取得（キャッシュ対応）
 
     - 企業の過去の決算データを取得
     - 財務指標も自動計算して返却
+    - 1日間キャッシュ
     """
+    # キャッシュキー生成
+    cache_key = f"financials:{stock_code}"
+
+    # キャッシュチェック
+    cached_data = cache_service.get(cache_key)
+    if cached_data is not None:
+        return cached_data
+
     # 企業を検索
     company = db.query(Company).filter(
         Company.stock_code == stock_code
@@ -173,6 +197,9 @@ async def get_financials(
             **fd.__dict__,
             "metrics": metrics
         })
+
+    # キャッシュに保存（1日）
+    cache_service.set(cache_key, result, CACHE_TTL_FINANCIAL)
 
     return result
 
