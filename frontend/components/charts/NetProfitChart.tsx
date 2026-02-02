@@ -83,10 +83,11 @@ export default function NetProfitChart({ data }: NetProfitChartProps) {
             stroke={chartColors.net}
             strokeWidth={2}
             dot={(props: any) => {
-              const { cx, cy, index } = props;
+              const { cx, cy, index, payload } = props;
               const isActive = index === activeIndex;
               return (
                 <circle
+                  key={`dot-${payload.year}-${index}`}
                   cx={cx}
                   cy={cy}
                   r={isActive ? 6 : 4}

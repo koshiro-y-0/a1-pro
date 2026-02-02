@@ -59,10 +59,11 @@ export default function EquityRatioChart({ data }: EquityRatioChartProps) {
             stroke={chartColors.healthy}
             strokeWidth={2}
             dot={(props: any) => {
-              const { cx, cy, payload } = props;
+              const { cx, cy, index, payload } = props;
               const color = getHealthColor(payload.equity_ratio);
               return (
                 <circle
+                  key={`dot-${payload.year}-${index}`}
                   cx={cx}
                   cy={cy}
                   r={4}

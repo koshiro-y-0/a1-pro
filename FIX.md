@@ -112,7 +112,7 @@
 
 ---
 
-### 6. 決算データの追加 (Commit: 現在の作業)
+### 6. 決算データの追加 (Commit: b6fe3af)
 
 #### 問題
 - 企業情報は表示されるが、決算データが登録されていないため「決算データが登録されていません」と表示される
@@ -133,6 +133,41 @@
   - 流動負債 (current_liabilities)
 
 #### 変更ファイル
+- データベース直接操作（INSERT文）
+
+---
+
+### 7. React Key警告の修正と全企業データ追加 (Commit: 現在の作業)
+
+#### 問題
+- コンソールに "Each child in a list should have a unique 'key' prop" エラーが表示
+- チャートの `<circle>` 要素に key が設定されていない
+- 残りの企業（ソフトバンク、ソニー、KDDI等）の決算データが未登録
+
+#### 修正内容
+- **React Key警告の修正**:
+  - RevenueChart.tsx
+  - OperatingProfitChart.tsx
+  - NetProfitChart.tsx
+  - EquityRatioChart.tsx
+  - CurrentRatioChart.tsx
+  - ROEChart.tsx
+  - OperatingMarginChart.tsx
+  - 各チャートの `dot` prop 内の `<circle>` 要素に `key={`dot-${payload.fiscal_year}-${index}`}` を追加
+
+- **決算データの追加**（2019-2023年度、各5年分）:
+  - ソフトバンクグループ (9984)
+  - ソニーグループ (6758)
+  - KDDI (9433)
+  - 三菱UFJフィナンシャル・グループ (8306)
+  - キーエンス (6861)
+  - 任天堂 (7974)
+  - 信越化学工業 (4063)
+  - デンソー (6902)
+  - 東京エレクトロン (8035)
+
+#### 変更ファイル
+- `frontend/components/charts/*.tsx` - 全チャートコンポーネント
 - データベース直接操作（INSERT文）
 
 ---

@@ -83,10 +83,11 @@ export default function RevenueChart({ data }: RevenueChartProps) {
             stroke={chartColors.revenue}
             strokeWidth={2}
             dot={(props: any) => {
-              const { cx, cy, index } = props;
+              const { cx, cy, index, payload } = props;
               const isActive = index === activeIndex;
               return (
                 <circle
+                  key={`dot-${payload.fiscal_year}-${index}`}
                   cx={cx}
                   cy={cy}
                   r={isActive ? 6 : 4}
