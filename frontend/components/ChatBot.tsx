@@ -199,7 +199,7 @@ export default function ChatBot({ stockCode, companyName }: ChatBotProps) {
                 onKeyPress={handleKeyPress}
                 placeholder="質問を入力..."
                 disabled={isLoading}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 text-gray-900"
               />
               <button
                 onClick={handleSend}
