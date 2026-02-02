@@ -228,6 +228,40 @@
 
 ---
 
+### 9. 決算データ自動取得スクリプトの追加 (Commit: 現在の作業)
+
+#### 問題
+- 175社の銘柄が登録されたが、決算データは11社分のみ
+- 手動でデータを追加するのは現実的ではない
+- バフェット・コードAPIを活用した自動取得が必要
+
+#### 修正内容
+- **決算データ自動取得スクリプトの作成**:
+  - `backend/scripts/fetch_financials_buffett.py` - バフェット・コードAPI連携スクリプト
+  - 決算データがない企業を自動検出
+  - API経由で通期決算データを取得
+  - データベースに自動登録
+  - API制限対策（1秒/リクエスト、月500リクエスト）
+
+- **ドキュメント作成**:
+  - `backend/scripts/README.md` - スクリプトの使用方法とセットアップガイド
+  - APIキー取得方法
+  - 実行例とトラブルシューティング
+
+#### 使用方法
+```bash
+cd backend
+source venv/bin/activate
+export BUFFETT_CODE_API_KEY='your_api_key'
+python scripts/fetch_financials_buffett.py
+```
+
+#### 変更ファイル
+- `backend/scripts/fetch_financials_buffett.py` (新規作成)
+- `backend/scripts/README.md` (新規作成)
+
+---
+
 ## 既知の問題
 
 ### 1. Next.js バージョン不一致警告
