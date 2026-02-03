@@ -1,0 +1,42 @@
+# Frontend Dockerfile (React / Next.js)
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source and build
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Copy built files
+# For Next.js:
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+# For React (create-react-app), use serve instead:
+# RUN npm install -g serve
+# COPY --from=builder /app/build ./build
+# CMD ["serve", "-s", "build", "-l", "3000"]
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# For Next.js standalone:
+CMD ["node", "server.js"]

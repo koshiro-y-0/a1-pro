@@ -1,0 +1,44 @@
+# Java Backend Dockerfile (Spring Boot)
+FROM eclipse-temurin:17-jdk-alpine AS builder
+
+WORKDIR /app
+
+# Copy gradle/maven files
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle.kts settings.gradle.kts ./
+# For Maven, use instead:
+# COPY mvnw .
+# COPY .mvn .mvn
+# COPY pom.xml .
+
+# Download dependencies
+RUN ./gradlew dependencies --no-daemon
+# For Maven: RUN ./mvnw dependency:go-offline
+
+# Copy source and build
+COPY src src
+RUN ./gradlew bootJar --no-daemon
+# For Maven: RUN ./mvnw package -DskipTests
+
+# Production stage
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup --system --gid 1001 spring && \
+    adduser --system --uid 1001 spring
+
+# Copy jar
+COPY --from=builder /app/build/libs/*.jar app.jar
+# For Maven: COPY --from=builder /app/target/*.jar app.jar
+
+USER spring
+
+EXPOSE 8000
+
+# JVM optimization for containers
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+
+CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar --server.port=8000"]
