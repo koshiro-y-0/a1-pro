@@ -1,0 +1,58 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/${{ secrets.EC2_USER }}/a1-pro
+
+            # Pull latest changes
+            git pull origin main
+
+            # Create .env file
+            cat > .env << EOF
+            MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            BUFFETT_CODE_API_KEY=${{ secrets.BUFFETT_CODE_API_KEY }}
+            EXCHANGE_RATE_API_KEY=${{ secrets.EXCHANGE_RATE_API_KEY }}
+            OLLAMA_BASE_URL=http://host.docker.internal:11434
+            OLLAMA_MODEL=llama3.1:8b
+            NEXT_PUBLIC_API_URL=http://localhost/api
+            EOF
+
+            # Stop and remove old containers
+            docker-compose down
+
+            # Rebuild and start containers
+            docker-compose up -d --build
+
+            # Run database migrations
+            docker-compose exec -T backend alembic upgrade head
+
+            # Show running containers
+            docker-compose ps
+
+            # Show logs
+            docker-compose logs --tail=50
+
+      - name: Health Check
+        run: |
+          sleep 30
+          curl -f http://${{ secrets.EC2_HOST }}/health || exit 1
