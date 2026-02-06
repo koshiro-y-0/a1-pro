@@ -15,8 +15,9 @@ export default function NetProfitChart({ data }: NetProfitChartProps) {
   const reversedData = [...data].reverse();
   const chartData = reversedData.map((item, index) => {
     const netProfit = item.net_profit ? item.net_profit / 100000000 : null;
-    const prevNetProfit = index > 0 && reversedData[index - 1].net_profit
-      ? reversedData[index - 1].net_profit / 100000000
+    const prevItem = index > 0 ? reversedData[index - 1] : null;
+    const prevNetProfit = prevItem && prevItem.net_profit
+      ? prevItem.net_profit / 100000000
       : null;
 
     const yoyGrowth = netProfit !== null && prevNetProfit !== null

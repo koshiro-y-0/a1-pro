@@ -15,8 +15,9 @@ export default function RevenueChart({ data }: RevenueChartProps) {
   const reversedData = [...data].reverse();
   const chartData = reversedData.map((item, index) => {
     const revenue = item.revenue ? item.revenue / 100000000 : null;
-    const prevRevenue = index > 0 && reversedData[index - 1].revenue
-      ? reversedData[index - 1].revenue / 100000000
+    const prevItem = index > 0 ? reversedData[index - 1] : null;
+    const prevRevenue = prevItem && prevItem.revenue
+      ? prevItem.revenue / 100000000
       : null;
 
     const yoyGrowth = revenue !== null && prevRevenue !== null

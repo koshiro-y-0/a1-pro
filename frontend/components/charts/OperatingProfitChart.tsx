@@ -15,8 +15,9 @@ export default function OperatingProfitChart({ data }: OperatingProfitChartProps
   const reversedData = [...data].reverse();
   const chartData = reversedData.map((item, index) => {
     const operatingProfit = item.operating_profit ? item.operating_profit / 100000000 : null;
-    const prevOperatingProfit = index > 0 && reversedData[index - 1].operating_profit
-      ? reversedData[index - 1].operating_profit / 100000000
+    const prevItem = index > 0 ? reversedData[index - 1] : null;
+    const prevOperatingProfit = prevItem && prevItem.operating_profit
+      ? prevItem.operating_profit / 100000000
       : null;
 
     const yoyGrowth = operatingProfit !== null && prevOperatingProfit !== null
