@@ -85,7 +85,6 @@ export default function PortfolioPage() {
           <Loading text="読み込み中..." />
         ) : (
           <PageTransition>
-          <>
             {/* Performance Summary */}
             {performance && (
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
