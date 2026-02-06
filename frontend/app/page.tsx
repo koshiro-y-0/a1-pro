@@ -17,6 +17,7 @@ import ChatBot from "@/components/ChatBot";
 import Loading from "@/components/Loading";
 import PageTransition from "@/components/PageTransition";
 import MobileMenu from "@/components/MobileMenu";
+import DarkModeToggle from "@/components/DarkModeToggle";
 import { CompanySearchResult, Company } from "@/types/company";
 import { FinancialData, CombinedData } from "@/types/financial";
 import { companiesApi } from "@/services/api";
@@ -48,13 +49,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <DarkModeToggle />
       <MobileMenu />
       <main className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 animate-fadeInDown">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">A1-PRO</h1>
-          <p className="text-base sm:text-lg text-gray-600">日本株分析Webアプリケーション</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">A1-PRO</h1>
+          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">日本株分析Webアプリケーション</p>
         </div>
 
         {/* Search Bar */}

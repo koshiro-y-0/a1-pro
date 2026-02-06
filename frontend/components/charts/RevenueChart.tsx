@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { FinancialData } from "@/types/financial";
 import chartColors from "@/lib/chartColors";
 
@@ -51,10 +51,10 @@ export default function RevenueChart({ data }: RevenueChartProps) {
   };
 
   return (
-    <div className="card card-hover p-6">
+    <div className="card card-hover p-6 bg-white shadow-lg">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">売上高推移</h3>
       <ResponsiveContainer width="100%" height={300}>
-        <LineChart
+        <AreaChart
           data={chartData}
           onMouseMove={(state: any) => {
             if (state.isTooltipActive) {
@@ -65,6 +65,12 @@ export default function RevenueChart({ data }: RevenueChartProps) {
           }}
           onMouseLeave={() => setActiveIndex(null)}
         >
+          <defs>
+            <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={chartColors.revenue} stopOpacity={0.8}/>
+              <stop offset="95%" stopColor={chartColors.revenue} stopOpacity={0.1}/>
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
           <XAxis
             dataKey="year"
@@ -77,11 +83,12 @@ export default function RevenueChart({ data }: RevenueChartProps) {
             label={{ value: "億円", angle: -90, position: "insideLeft" }}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Line
+          <Area
             type="monotone"
             dataKey="revenue"
             stroke={chartColors.revenue}
-            strokeWidth={2}
+            strokeWidth={3}
+            fill="url(#revenueGradient)"
             dot={(props: any) => {
               const { cx, cy, index, payload } = props;
               const isActive = index === activeIndex;
@@ -99,8 +106,10 @@ export default function RevenueChart({ data }: RevenueChartProps) {
               );
             }}
             activeDot={{ r: 8, strokeWidth: 2, stroke: "white" }}
+            animationDuration={1500}
+            animationEasing="ease-out"
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );
