@@ -46,7 +46,7 @@ export default function CurrentRatioChart({ data }: CurrentRatioChartProps) {
             formatter={(value: any) => {
               const healthColor = getHealthColor(value);
               return [
-                <span style={{ color: healthColor }}>
+                <span key="value" style={{ color: healthColor }}>
                   {value !== null ? `${Number(value).toFixed(2)} %` : "N/A"}
                 </span>,
                 "流動比率",

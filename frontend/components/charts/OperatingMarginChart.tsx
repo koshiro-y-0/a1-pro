@@ -46,7 +46,7 @@ export default function OperatingMarginChart({ data }: OperatingMarginChartProps
             formatter={(value: any) => {
               const healthColor = getHealthColor(value);
               return [
-                <span style={{ color: healthColor }}>
+                <span key="value" style={{ color: healthColor }}>
                   {value !== null ? `${Number(value).toFixed(2)} %` : "N/A"}
                 </span>,
                 "営業利益率",

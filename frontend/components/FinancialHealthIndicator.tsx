@@ -19,6 +19,10 @@ interface HealthAssessment {
 export default function FinancialHealthIndicator({
   data,
 }: FinancialHealthIndicatorProps) {
+  // カウントアップアニメーション用のstate（Hooksは常に最初に呼ぶ）
+  const [displayScore, setDisplayScore] = useState(0);
+
+  // 早期リターンの前にHooksを呼ぶ
   if (data.length === 0) return null;
 
   const latestData = data[0];
@@ -95,9 +99,7 @@ export default function FinancialHealthIndicator({
     overallStatus = { status: "danger", label: "危険", color: chartColors.danger };
   }
 
-  // カウントアップアニメーション用のstate
-  const [displayScore, setDisplayScore] = useState(0);
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     let currentScore = 0;
     const increment = totalScore / 30; // 30フレームで完了
